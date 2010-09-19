@@ -4,6 +4,7 @@
 
 #include <memory.h>
 #include <stdlib.h>
+#include <stddef.h>
 
 /* declare a sum type, which externally just looks like a pointer
  * to an enum */
@@ -27,7 +28,7 @@
 #define MATCH(X) int* MATCH_needs_new_scope = (int*)(X); switch(*MATCH_needs_new_scope) {
 
 /* match a particular constructor */
-#define AS(ctor, var) break; } case ctor##: { struct ctor* var = (struct ctor*)(++MATCH_needs_new_scope);
+#define AS(ctor, var) break; } case ctor##: { struct ctor* var = (struct ctor*)((char*)MATCH_needs_new_scope + offsetof(CTOR(ctor), data));
 
 /* match any constructor */
 #define MATCHANY break; } default:
