@@ -17,12 +17,9 @@
 #define CTOR(ctor) struct { int _tag; struct ctor data; }
 
 /* create a new instance of the given sum */
-/* alternately, could use __VA_ARGS__ for initializer */
 #define LET(var, ctor, ...) do { \
   CTOR(ctor) __tmp = { ctor, { __VA_ARGS__ } }; \
-  var = NEW(ctor); } while (0)
-
-#define NEW(ctor) memcpy( (CTOR(ctor)*)malloc(sizeof(CTOR(ctor))), &__tmp, sizeof(__tmp))
+  var = memcpy(malloc(sizeof(__tmp)), &__tmp, sizeof(__tmp)); } while (0)
 
 /* deconstruct a sum type */
 #define MATCH(X) int* MATCH_needs_new_scope = (int*)(X); switch(*MATCH_needs_new_scope) {
