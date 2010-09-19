@@ -10,14 +10,6 @@ SUM(foo) {
 CASE(foo, foo_one) { int i; char c; };
 CASE(foo, foo_two) { double d; };
 
-//CASE(foo, foo_two) {
-//  double d;
-//} ENDCASE
-//CASE(foo, foo_two, { double d; });
-//CASE(foo, foo_two, { 
-//  double d;
-//});
-
 int main(int argc, char** argv) {
 	//LET(foo, f, foo_one, 3, 'g');
 	foo f;
