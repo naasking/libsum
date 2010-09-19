@@ -15,20 +15,22 @@ void test(foo f) {
 		AS(foo_one, y) printf("foo_one: %d, %c\n", y->i, y->c);
 		AS(foo_two, y) printf("foo_two: %f\n", y->d);
 		MATCHANY
-		fprintf(stderr, "No such case!");
-		exit(1);
+			fprintf(stderr, "No such case!");
+			exit(1);
 	}
 }
 
 int main(int argc, char** argv) {
 	{
 		foo f;
-		LET(f, foo_one, 3, 'g');
+		LET(foo, f, foo_one, 3, 'g');
+		//LET(f, foo_one, x, x->i=3, x->c='g');
 		test(f);
 	}
 	{
 		foo x;
-		LET(x, foo_two, 4.567);
+		LET(foo, x, foo_two, 4.567);
+		//LET(x, foo_two, y, y->d = 4.567);
 		test(x);
 	}
 	printf("size foo_one: %d\n", sizeof(CTOR(foo_one)));

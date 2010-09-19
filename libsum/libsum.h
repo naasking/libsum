@@ -17,9 +17,15 @@
 #define CTOR(ctor) struct { int _tag; struct ctor data; }
 
 /* create a new instance of the given sum */
-#define LET(var, ctor, ...) do { \
+#define LET(T, var, ctor, ...) do { \
   CTOR(ctor) __tmp = { ctor, { __VA_ARGS__ } }; \
-  var = memcpy(malloc(sizeof(__tmp)), &__tmp, sizeof(__tmp)); } while (0)
+  var = (T)memcpy(malloc(sizeof(__tmp)), &__tmp, sizeof(__tmp)); } while (0)
+
+//#define LET(var, ctor, l, ...) do { \
+//  CTOR(ctor)* __tmp = (CTOR(ctor)*)malloc(sizeof(__tmp)); \
+//  struct ctor *##l = &__tmp->data; \
+//  __VA_ARGS__; \
+//  var = &__tmp->_tag; } while (0)
 
 /* deconstruct a sum type */
 #define MATCH(X) int* MATCH_needs_new_scope = (int*)(X); switch(*MATCH_needs_new_scope) {
