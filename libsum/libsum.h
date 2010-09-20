@@ -17,7 +17,10 @@
 #define CTOR(ctor) struct { int _tag; struct ctor data; }
 
 /* create a new instance of the given sum */
-#define LET(T, var, ctor, ...) do { \
+#define LET(T, var, ctor, ...) MAKE(T,var, ctor, malloc, __VA_ARGS__)
+
+/* provide a custom allocator */
+#define MAKE(T, var, ctor, malloc, ...) do { \
   CTOR(ctor) __tmp = { ctor, { __VA_ARGS__ } }; \
   var = (T)memcpy(malloc(sizeof(__tmp)), &__tmp, sizeof(__tmp)); } while (0)
 
@@ -31,7 +34,9 @@
 #define MATCH(X) int* MATCH_needs_new_scope = (int*)(X); switch(*MATCH_needs_new_scope) {
 
 /* match a particular constructor */
-#define AS(ctor, var) break; } case ctor##: { struct ctor* var = (struct ctor*)((char*)MATCH_needs_new_scope + offsetof(CTOR(ctor), data));
+#define AS(ctor, var) break; } case ctor##: { struct ctor* var = FROM(ctor, MATCH_needs_new_scope);
+
+#define FROM(ctor, var) (struct ctor*)((char*)var + offsetof(CTOR(ctor), data))
 
 /* match any constructor */
 #define MATCHANY break; } default:
