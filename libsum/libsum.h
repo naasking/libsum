@@ -1,5 +1,8 @@
 /*
  * Disjoint unions, aka sum types, and pattern matching for C.
+ *
+ * License: LGPL
+ * Copyright 2010 Sandro Magi
  */
 
 #include <memory.h>
@@ -26,12 +29,6 @@
   __tmpp->tag = __tmp.tag; \
   __tmpp->data = __tmp.data; \
   var = &(__tmpp->tag); } while (0)
-
-//#define LET(var, ctor, l, ...) do { \
-//  CTOR(ctor)* __tmp = (CTOR(ctor)*)malloc(sizeof(__tmp)); \
-//  struct ctor *##l = &__tmp->data; \
-//  __VA_ARGS__; \
-//  var = &__tmp->_tag; } while (0)
 
 /* deconstruct a sum type */
 #define MATCH(X) int* MATCH_needs_new_scope = (int*)(X); switch(*MATCH_needs_new_scope) {

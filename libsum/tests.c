@@ -1,3 +1,9 @@
+/*
+ * Unit tests for sums and pattern matching.
+ *
+ * License: LGPL
+ * Copyright 2010 Sandro Magi
+ */
 
 #include <stdio.h>
 #include <assert.h>
@@ -29,17 +35,15 @@ int main(int argc, char** argv) {
 	{
 		foo f;
 		LET(f, foo_one, 3, 'g');
-		/*LET(f, foo_one, x, x->i=3, x->c='g');*/
 		assert(1 == test(f));
 		free(f);
 	}
 	{
 		foo x;
 		LET(x, foo_two, 4.567);
-		/*LET(x, foo_two, y, y->d = 4.567);*/
 		assert(2 == test(x));
 
-		/* test MATCHAN */
+		/* test MATCHANY */
 		*x = (enum foo)4;
 		assert(3 == test(x));
 
