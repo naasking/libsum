@@ -14,15 +14,18 @@
  * and constructors */
 #define CASE(sum, ctor) struct ctor
 
-#define CTOR(ctor) struct { int _tag; struct ctor data; }
+#define CTOR(ctor) struct { int tag; struct ctor data; }
 
 /* create a new instance of the given sum */
-#define LET(T, var, ctor, ...) MAKE(T,var, ctor, malloc, __VA_ARGS__)
+#define LET(var, ctor, ...) MAKE(var, ctor, malloc, __VA_ARGS__)
 
 /* provide a custom allocator */
-#define MAKE(T, var, ctor, malloc, ...) do { \
+#define MAKE(var, ctor, malloc, ...) do { \
   CTOR(ctor) __tmp = { ctor, { __VA_ARGS__ } }; \
-  var = (T)memcpy(malloc(sizeof(__tmp)), &__tmp, sizeof(__tmp)); } while (0)
+  CTOR(ctor)* __tmpp = (CTOR(ctor)*)malloc(sizeof(__tmp)); \
+  __tmpp->tag = __tmp.tag; \
+  __tmpp->data = __tmp.data; \
+  var = &(__tmpp->tag); } while (0)
 
 //#define LET(var, ctor, l, ...) do { \
 //  CTOR(ctor)* __tmp = (CTOR(ctor)*)malloc(sizeof(__tmp)); \
