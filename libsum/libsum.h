@@ -24,10 +24,10 @@
 
 /* provide a custom allocator */
 #define MAKE(var, ctor, malloc, ...) do { \
-  CTOR(ctor) __tmp = { ctor, { __VA_ARGS__ } }; \
-  CTOR(ctor)* __tmpp = (CTOR(ctor)*)malloc(sizeof(__tmp)); \
-  __tmpp->tag = __tmp.tag; \
-  __tmpp->data = __tmp.data; \
+  struct ctor __tmp = { __VA_ARGS__ }; \
+  CTOR(ctor)* __tmpp = (CTOR(ctor)*)malloc(sizeof(CTOR(ctor))); \
+  __tmpp->tag = ctor; \
+  __tmpp->data = __tmp; \
   var = &(__tmpp->tag); } while (0)
 
 /* deconstruct a sum type */
